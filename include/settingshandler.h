@@ -7,6 +7,7 @@ class TSettingsHandler : public QObject {
 	Q_OBJECT
 
 	public:
+		// Структура даних принтеру
 		struct TPrinterSettings {
 			float nuzzleSize;
 			unsigned firstLayThickness;
@@ -14,6 +15,7 @@ class TSettingsHandler : public QObject {
 			float layerThickness;
 		};
 
+		// Структура даних програми
 		struct TProgramSettings {
 			QString language;
 			QRect geometry;
@@ -23,14 +25,21 @@ class TSettingsHandler : public QObject {
 		~TSettingsHandler();
 
 		static TSettingsHandler *GetInstance();
+
+		// Отримати налаштування принтера
 		TPrinterSettings &GetPrinterSettings();
+		// Отримати налаштування програми
 		TProgramSettings &GetProgramSettings();
 
+		// Завантажити налаштування програми із пам'яті
 		void LoadProgramSettings();
+		// Завантажити налаштування програми із пам'яті
 		void LoadPrinterSettings();
 
 	public slots:
+		// Записати налаштування програми
 		void SaveProgramSettings();
+		// Записати налаштування принтеру
 		void SavePrinterSettings();
 
 	private:
