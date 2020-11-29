@@ -9,14 +9,18 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 INCLUDEPATH += \
-    include/
+    $$PWD/include/
 
 SOURCES += \
     main.cpp \
-    mainwindow.cpp
+    src/langhandler.cpp \
+    src/mainwindow.cpp \
+    src/settingshandler.cpp
 
 HEADERS += \
-    mainwindow.h
+    include/langhandler.h \
+    include/mainwindow.h \
+    include/settingshandler.h
 
 TRANSLATIONS += \
     lang/en.ts
@@ -25,3 +29,6 @@ TRANSLATIONS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    languages.qrc
