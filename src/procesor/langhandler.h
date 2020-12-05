@@ -22,6 +22,8 @@ class TLanguageHandler : public QObject {
 		const TLanguage &getLanguage(const QString &code);
 		// Повертає весь список мов
 		const QVector<TLanguage> &getLangList();
+		// Повертає код поточно-обраної мови
+		const QString &getCurrentLangCode();
 
 	public slots:
 		// Встановлює мову програми
@@ -32,5 +34,8 @@ class TLanguageHandler : public QObject {
 
 		QTranslator *translator = nullptr;
 		QVector<TLanguage> *languageList;
+		QString currentLang;
 		const TLanguage empty = {"Unkonwn", "", ""};
+
+
 };

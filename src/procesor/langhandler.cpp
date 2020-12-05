@@ -29,6 +29,10 @@ const QVector<TLanguageHandler::TLanguage> &TLanguageHandler::getLangList() {
 	return *languageList;
 }
 
+const QString &TLanguageHandler::getCurrentLangCode() {
+	return currentLang;
+}
+
 void TLanguageHandler::SetLanguage(const QString &code) {
 	if (translator == nullptr) {
 		qCritical() << className << "translator is null";
@@ -36,6 +40,7 @@ void TLanguageHandler::SetLanguage(const QString &code) {
 	}
 
 	QString langPath = "://lang/" + code + ".qm";
+	currentLang = code;
 	if (!translator->load(langPath)) {
 		QMessageBox::critical(nullptr, tr("Language error"), tr("Can't load language \"") + getLanguage(code).name + "\"");
 	}

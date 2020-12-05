@@ -9,18 +9,22 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 INCLUDEPATH += \
-    $$PWD/include/
+    $$PWD/src/
 
 SOURCES += \
     main.cpp \
-    src/langhandler.cpp \
-    src/mainwindow.cpp \
-    src/settingshandler.cpp
+    src/procesor/globalfunctions.cpp \
+    src/procesor/imagehandler.cpp \
+    src/procesor/langhandler.cpp \
+    src/procesor/settingshandler.cpp \
+    src/mainwindow.cpp
 
 HEADERS += \
-    include/langhandler.h \
-    include/mainwindow.h \
-    include/settingshandler.h
+    src/procesor/globalfunctions.h \
+    src/procesor/imagehandler.h \
+    src/procesor/langhandler.h \
+    src/procesor/settingshandler.h \
+    src/mainwindow.h
 
 TRANSLATIONS += \
     lang/en.ts
