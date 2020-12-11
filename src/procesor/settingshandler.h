@@ -20,7 +20,13 @@ class TSettingsHandler : public QObject {
 		struct TProgramSettings {
 			QString language;
 			QRect geometry;
+			int cutRectType;
 			QVector<QString> recentFiles;
+		};
+
+		enum TCutRectType {
+			Square = 0,
+			RoundedSquare = 1
 		};
 
 		~TSettingsHandler();

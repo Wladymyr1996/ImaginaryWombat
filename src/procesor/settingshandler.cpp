@@ -25,6 +25,7 @@ void TSettingsHandler::LoadProgramSettings() {
 
 	programSettngs.geometry = fileSettings->value("/Geometry", QRect(100, 100, 640, 480)).toRect();
 	programSettngs.language = fileSettings->value("/Language", "en").toString();
+	programSettngs.cutRectType = fileSettings->value("/CutRectType", Square).toInt();
 
 	programSettngs.recentFiles.clear();
 	int recentFilesCount = fileSettings->value("/RecentFilesCount", 0).toInt();
@@ -57,6 +58,7 @@ void TSettingsHandler::SaveProgramSettings() {
 	fileSettings->setValue("/Geometry", programSettngs.geometry);
 	fileSettings->setValue("/Language", programSettngs.language);
 	fileSettings->setValue("/RecentFilesCount", programSettngs.recentFiles.count());
+	fileSettings->setValue("/CutRectType", programSettngs.cutRectType);
 
 	if (programSettngs.recentFiles.count() > 0) {
 		fileSettings->beginGroup("/RecentFiles");
