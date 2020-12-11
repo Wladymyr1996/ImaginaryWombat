@@ -17,14 +17,20 @@ SOURCES += \
     src/procesor/imagehandler.cpp \
     src/procesor/langhandler.cpp \
     src/procesor/settingshandler.cpp \
-    src/mainwindow.cpp
+    src/mainwindow.cpp \
+    src/view/histogramview.cpp \
+    src/view/imageview.cpp \
+    src/view/tools.cpp
 
 HEADERS += \
     src/procesor/globalfunctions.h \
     src/procesor/imagehandler.h \
     src/procesor/langhandler.h \
     src/procesor/settingshandler.h \
-    src/mainwindow.h
+    src/mainwindow.h \
+    src/view/histogramview.h \
+    src/view/imageview.h \
+    src/view/tools.h
 
 TRANSLATIONS += \
     lang/en.ts
