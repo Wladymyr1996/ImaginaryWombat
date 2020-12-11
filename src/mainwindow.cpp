@@ -11,10 +11,22 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 	createTopMenu();
 	setGeometry(settingsHandler->GetProgramSettings().geometry);
 
+	imageViewer = new TImageView;
+	toolsViewer = new TTools;
+	QHBoxLayout *lay = new QHBoxLayout;
+	lay->addWidget(toolsViewer);
+	lay->addWidget(imageViewer);
+
+	QWidget *wdgt = new QWidget;
+	wdgt->setLayout(lay);
+	setCentralWidget(wdgt);
+
+
 	langHandler->SetLanguage(settingsHandler->GetProgramSettings().language);
 
 	connect(imageHandler, &TImageHandler::isClosed, this, &MainWindow::updateFileMenu);
 	connect(imageHandler, &TImageHandler::isOpened, this, &MainWindow::updateFileMenu);
+	connect(toolsViewer, &TTools::formUpdated, imageViewer, static_cast<void (TImageView::*)()>(&TImageView::repaint));
 }
 
 MainWindow::~MainWindow() {
@@ -25,6 +37,7 @@ void MainWindow::changeEvent(QEvent *event) {
 	if (event->type() == QEvent::LanguageChange) {
 		//Оновлення текстів
 		updateTextes();
+		toolsViewer->updateTextes();
 		settingsHandler->GetProgramSettings().language = langHandler->getCurrentLangCode();
 	} else
 		QWidget::changeEvent(event);
@@ -39,10 +52,7 @@ void MainWindow::doOpenImage() {
 	QString filename = QFileDialog::getOpenFileName(this, tr("Open image"), "", tr("Images", "Open file dialog") + " (*.png *jpg *jpeg);; " + tr("All files", "Open file dialog") + "(*.*)");
 	if (filename.isNull()) return;
 
-	if (!imageHandler->openImage(filename)) {
-		QMessageBox::critical(nullptr, tr("Open image error"), tr("Can't open image \"") + GlobalFunctions::getFileNameFromFilepath(filename) + "\"!");
-		return;
-	}
+	if (!openImage(filename)) return;
 
 	QVector<QString> &recentFileList = settingsHandler->GetProgramSettings().recentFiles;
 
@@ -60,10 +70,7 @@ void MainWindow::doOpenImage() {
 }
 
 void MainWindow::doOpenRecentImage(QString filename) {
-	if (!imageHandler->openImage(filename)) {
-		QMessageBox::critical(nullptr, tr("Open image error"), tr("Can't open image \"") + GlobalFunctions::getFileNameFromFilepath(filename) + "\"!");
-		return;
-	}
+	if (!openImage(filename)) return;
 
 	QVector<QString> &recentFileList = settingsHandler->GetProgramSettings().recentFiles;
 
@@ -87,6 +94,28 @@ void MainWindow::updateFileMenu() {
 
 	saveStlAction->setEnabled(active);
 	closeImageAction->setEnabled(active);
+}
+
+bool MainWindow::openImage(QString filename) {
+	int openError = imageHandler->openImage(filename);
+	if (openError != TImageHandler::IMG_ERROR::Ok) {
+		QString msg;
+
+		switch (openError) {
+			case TImageHandler::IMG_ERROR::ParseError:
+				msg = tr("Can't open file as image!"); break;
+			case TImageHandler::IMG_ERROR::SizeError:
+				msg = tr("Image is too small!"); break;
+			case TImageHandler::IMG_ERROR::RatioError:
+				msg = tr("Image aspect ratio error!"); break;
+			default:
+				msg = tr("Unknown error");
+		}
+
+		QMessageBox::critical(centralWidget(), tr("Open image error"), msg);
+		return false;
+	}
+	return true;
 }
 
 void MainWindow::updateTextes() {

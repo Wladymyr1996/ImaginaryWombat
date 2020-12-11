@@ -6,11 +6,14 @@
 #include <QAction>
 #include <QMenuBar>
 #include <QMenu>
+#include <QHBoxLayout>
 
 #include "procesor/langhandler.h"
 #include "procesor/settingshandler.h"
 #include "procesor/imagehandler.h"
 #include "procesor/globalfunctions.h"
+#include "view/imageview.h"
+#include "view/tools.h"
 
 class MainWindow : public QMainWindow {
 	Q_OBJECT
@@ -29,6 +32,8 @@ class MainWindow : public QMainWindow {
 		void updateFileMenu();
 
 	private:
+		bool openImage(QString filename);
+
 		void updateTextes();
 		void updateRecentMenu();
 		void loadLanguages();
@@ -72,4 +77,6 @@ class MainWindow : public QMainWindow {
 		TLanguageHandler *langHandler = TLanguageHandler::GetInstance();
 		TSettingsHandler *settingsHandler = TSettingsHandler::GetInstance();
 		TImageHandler *imageHandler = TImageHandler::GetInstance();
+		TImageView *imageViewer;
+		TTools *toolsViewer;
 };
