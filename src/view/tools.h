@@ -16,17 +16,16 @@ class TTools : public QWidget {
 
 	public:
 		explicit TTools(QWidget *parent = nullptr);
-
-		void updateTextes();
 		void updateForms();
+
+	public slots:
+		void updateTextes();
 
 	signals:
 		void formUpdated();
 
 	private:
 		void doFormUpdate();
-
-	private:
 		void addForm(QString name);
 
 		QComboBox *cmbForm;

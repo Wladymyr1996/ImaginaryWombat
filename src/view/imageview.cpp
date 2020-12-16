@@ -20,6 +20,11 @@ TImageView::TImageView(QWidget *parent) : QWidget(parent) {
 	connect(imageHandler, &TImageHandler::isUpdated, this, static_cast<void (TImageView::*)()>(&TImageView::repaint));
 }
 
+void TImageView::updateTextes() {
+	strNoImage = tr("Image not opened");
+	repaint();
+}
+
 void TImageView::imageOpen() {
 	if (!imageHandler->imageIsOpened())
 		return;
@@ -91,6 +96,14 @@ void TImageView::paintEvent(QPaintEvent *) {
 		painter.setBrush(Qt::white);
 		painter.setPen(Qt::white);
 		painter.drawText(lblFrame, strNoImage);
+	}
+
+	if (!isEnabled()) {
+		QColor color = QApplication::palette().color(QPalette::Inactive, QPalette::Window);
+		color.setAlpha(200);
+
+		painter.setBrush(QBrush(color));
+		painter.drawRect(-1, -1, width()+1, height() + 1);
 	}
 
 	painter.end();

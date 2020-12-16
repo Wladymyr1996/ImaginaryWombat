@@ -10,6 +10,7 @@ class TImageView : public QWidget {
 		explicit TImageView(QWidget *parent = nullptr);
 
 	public slots:
+		void updateTextes();
 		void imageOpen();
 		void imageClose();
 
@@ -29,7 +30,7 @@ class TImageView : public QWidget {
 		TImageHandler *imageHandler = TImageHandler::GetInstance();
 		TSettingsHandler *settingsHandler = TSettingsHandler::GetInstance();
 
-		QString strNoImage = "Image not opened";
+		QString strNoImage;
 		QRect imgFrame;
 		QRect cutRectFrame;
 		double scale;

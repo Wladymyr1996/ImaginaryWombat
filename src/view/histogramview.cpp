@@ -48,6 +48,14 @@ void THistogramView::paintEvent(QPaintEvent *) {
 
 	}
 
+	if (!isEnabled()) {
+		QColor color = QApplication::palette().color(QPalette::Inactive, QPalette::Window);
+		color.setAlpha(200);
+
+		painter.setBrush(QBrush(color));
+		painter.drawRect(-1, -1, width()+1, height() + 1);
+	}
+
 	painter.end();
 }
 
