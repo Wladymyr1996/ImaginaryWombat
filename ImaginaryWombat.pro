@@ -18,9 +18,11 @@ SOURCES += \
     src/procesor/langhandler.cpp \
     src/procesor/settingshandler.cpp \
     src/mainwindow.cpp \
+    src/procesor/stlhandler.cpp \
     src/view/histogramview.cpp \
     src/view/imageview.cpp \
-    src/view/tools.cpp
+    src/view/tools.cpp \
+    src/window/settingsdialog.cpp
 
 HEADERS += \
     src/procesor/globalfunctions.h \
@@ -28,9 +30,11 @@ HEADERS += \
     src/procesor/langhandler.h \
     src/procesor/settingshandler.h \
     src/mainwindow.h \
+    src/procesor/stlhandler.h \
     src/view/histogramview.h \
     src/view/imageview.h \
-    src/view/tools.h
+    src/view/tools.h \
+    src/window/settingsdialog.h
 
 TRANSLATIONS += \
     lang/en.ts
