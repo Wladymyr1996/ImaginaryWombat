@@ -30,6 +30,22 @@ uchar *TImageHandler::getHistogramMapPtr() {
 	return histogramMap;
 }
 
+void TImageHandler::getHighmap(uchar *map, int widthMap, int heightMap) {
+	if (!imageIsOpened())
+		return;
+
+	QImage img = tmpImage.copy(cutRect).scaled(widthMap, heightMap, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+	int depth = 4;
+	for (int i = 0; i < heightMap; i++) {
+		uchar *line = img.scanLine(i);
+
+		for (int j = 0; j < widthMap; j++) {
+			QRgb *pixel = reinterpret_cast<QRgb *>(line + j * depth);
+			map[i * widthMap + j] = qRed(*pixel);
+		}
+	}
+}
+
 int TImageHandler::openImage(QString filename) {
 	IMG_ERROR ret = Ok;
 

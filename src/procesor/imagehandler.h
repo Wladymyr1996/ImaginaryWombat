@@ -16,6 +16,7 @@ class TImageHandler : public QObject {
 		void setCutRect(const QRect &rect);
 		void setHistagramLevels(int blackLvl, int whiteLvl);
 		uchar *getHistogramMapPtr();
+		void getHighmap(uchar *map, int widthMap, int heightMap);
 
 	public slots:
 		int openImage(QString filename);
