@@ -7,6 +7,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 	setWindowTitle(tr("Imaginary Wombat"));
 	setMinimumSize(640, 480);
 
+	settingsDialog = new TSettingsDialog(this, Qt::WindowStaysOnTopHint);
+
 	loadLanguages();
 	createTopMenu();
 	setGeometry(settingsHandler->GetProgramSettings().geometry);
@@ -21,12 +23,16 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 	wdgt->setLayout(lay);
 	setCentralWidget(wdgt);
 
-
 	langHandler->SetLanguage(settingsHandler->GetProgramSettings().language);
 
 	connect(imageHandler, &TImageHandler::isClosed, this, &MainWindow::updateFileMenu);
 	connect(imageHandler, &TImageHandler::isOpened, this, &MainWindow::updateFileMenu);
 	connect(toolsViewer, &TTools::formUpdated, imageViewer, static_cast<void (TImageView::*)()>(&TImageView::repaint));
+
+	connect(this, &MainWindow::langUpadated, this, &MainWindow::updateTextes);
+	connect(this, &MainWindow::langUpadated, toolsViewer, &TTools::updateTextes);
+	connect(this, &MainWindow::langUpadated, imageViewer, &TImageView::updateTextes);
+	connect(this, &MainWindow::langUpadated, settingsDialog, &TSettingsDialog::updateTextes);
 }
 
 MainWindow::~MainWindow() {
@@ -36,9 +42,8 @@ MainWindow::~MainWindow() {
 void MainWindow::changeEvent(QEvent *event) {
 	if (event->type() == QEvent::LanguageChange) {
 		//Оновлення текстів
-		updateTextes();
-		toolsViewer->updateTextes();
 		settingsHandler->GetProgramSettings().language = langHandler->getCurrentLangCode();
+		emit langUpadated();
 	} else
 		QWidget::changeEvent(event);
 }
@@ -87,6 +92,12 @@ void MainWindow::doOpenRecentImage(QString filename) {
 	}
 
 	updateRecentMenu();
+}
+
+void MainWindow::doOpenPrinterSettings() {
+	setEnabled(false);
+	settingsDialog->exec();
+	setEnabled(true);
 }
 
 void MainWindow::updateFileMenu() {
@@ -222,6 +233,8 @@ void MainWindow::createSettingsMenu() {
 	settingsMenu->addMenu(languageMenu);
 
 	topMenu->addMenu(settingsMenu);
+
+	connect(printerSettingsAction, &QAction::triggered, this, &MainWindow::doOpenPrinterSettings);
 }
 
 void MainWindow::createLanguageMenu() {

@@ -15,6 +15,8 @@
 #include "view/imageview.h"
 #include "view/tools.h"
 
+#include "window/settingsdialog.h"
+
 class MainWindow : public QMainWindow {
 	Q_OBJECT
 
@@ -22,19 +24,22 @@ class MainWindow : public QMainWindow {
 		MainWindow(QWidget *parent = nullptr);
 		~MainWindow();
 
+	signals:
+		void langUpadated();
+
 	protected:
 		void changeEvent(QEvent *);
 
 	public slots:
+		void updateTextes();
 		void clearRecentFailesList();
 		void doOpenImage();
 		void doOpenRecentImage(QString filename);
+		void doOpenPrinterSettings();
 		void updateFileMenu();
 
 	private:
 		bool openImage(QString filename);
-
-		void updateTextes();
 		void updateRecentMenu();
 		void loadLanguages();
 
@@ -79,4 +84,6 @@ class MainWindow : public QMainWindow {
 		TImageHandler *imageHandler = TImageHandler::GetInstance();
 		TImageView *imageViewer;
 		TTools *toolsViewer;
+
+		TSettingsDialog *settingsDialog;
 };
