@@ -13,6 +13,7 @@ INCLUDEPATH += \
 
 SOURCES += \
     main.cpp \
+    src/procesor/3dmodel.cpp \
     src/procesor/globalfunctions.cpp \
     src/procesor/imagehandler.cpp \
     src/procesor/langhandler.cpp \
@@ -25,6 +26,7 @@ SOURCES += \
     src/window/settingsdialog.cpp
 
 HEADERS += \
+    src/procesor/3dmodel.h \
     src/procesor/globalfunctions.h \
     src/procesor/imagehandler.h \
     src/procesor/langhandler.h \
