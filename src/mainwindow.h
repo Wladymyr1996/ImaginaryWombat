@@ -12,6 +12,7 @@
 #include "procesor/settingshandler.h"
 #include "procesor/imagehandler.h"
 #include "procesor/globalfunctions.h"
+#include "procesor/stlhandler.h"
 #include "view/imageview.h"
 #include "view/tools.h"
 
@@ -36,6 +37,7 @@ class MainWindow : public QMainWindow {
 		void doOpenImage();
 		void doOpenRecentImage(QString filename);
 		void doOpenPrinterSettings();
+		void doSaveStl();
 		void updateFileMenu();
 
 	private:
@@ -82,6 +84,7 @@ class MainWindow : public QMainWindow {
 		TLanguageHandler *langHandler = TLanguageHandler::GetInstance();
 		TSettingsHandler *settingsHandler = TSettingsHandler::GetInstance();
 		TImageHandler *imageHandler = TImageHandler::GetInstance();
+		TStlHandler *stlHandler = TStlHandler::getInstance();
 		TImageView *imageViewer;
 		TTools *toolsViewer;
 

@@ -100,6 +100,29 @@ void MainWindow::doOpenPrinterSettings() {
 	setEnabled(true);
 }
 
+void MainWindow::doSaveStl() {
+	QString filename = QFileDialog::getSaveFileName(this, tr("Save STL model"), QDir::homePath(), "STL (*stl)");
+
+	if (filename.isEmpty())
+		return;
+
+	QFileInfo fi(filename);
+
+	if (fi.suffix() != "stl")
+		filename += ".stl";
+
+	QFile stlFile(filename);
+	if (!stlFile.open(QFile::WriteOnly)) {
+		QMessageBox::critical(this, tr("Can't open file"), tr("Can't open for writing file") + fi.fileName());
+		return;
+	}
+
+	uchar highMap[250 * 250];
+	imageHandler->getHighmap(highMap, 250, 250);
+	stlFile.write(stlHandler->getStl(fi.baseName(), highMap));
+	stlFile.close();
+}
+
 void MainWindow::updateFileMenu() {
 	bool active = imageHandler->imageIsOpened();
 
@@ -210,6 +233,7 @@ void MainWindow::createFileMenu() {
 
 	connect(openImageAction, &QAction::triggered, this, &MainWindow::doOpenImage);
 	connect(closeImageAction, &QAction::triggered, imageHandler, &TImageHandler::closeImage);
+	connect(saveStlAction, &QAction::triggered, this, &MainWindow::doSaveStl);
 	connect(exitAction, &QAction::triggered, this, &QMainWindow::close);
 
 	updateFileMenu();
