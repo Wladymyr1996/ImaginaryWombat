@@ -68,6 +68,51 @@ double TStlHandler::calculateZ(int value, float hight, float coef) {
 }
 
 void TStlHandler::generateStlFileData(const T3DModel &model, QByteArray &data) {
+	data.clear();
+
+	// Generate name to first 80 ASCII bytes
+	QByteArray header;
+	// Header can't contain word "solid" in 0 index
+	if (data.indexOf("solid") != 0) {
+		header.push_back(model.getName().toUtf8());
+		if (header.length() > 80)
+			header.remove(80, header.length() - 80);
+	}
+	if (header.length() < 80)
+		header.push_back(QByteArray(80-header.length(), 0));
+
+	// Insert header to data
+	data.push_back(header);
+
+	// Number of the triangle faces
+	uint32_t count = model.getFaces().count();
+	data.append(reinterpret_cast<char *>(&count), sizeof(count));
+
+	// Check data sizes
+	if (sizeof(TPoint::x) != 4) {
+		qCritical() << "sizeOf(TPoint::*) ≠ 4! Bad day bad day bad day!";
+		return;
+	}
+
+	// Pushing all faces
+	for (auto &face : model.getFaces()) {
+		// Add 3 coords 4 bytes to 0 (Empty normal) [12 bytes]
+		data.append(3 * 4, 0);
+
+		// All coords of all points
+		for (auto point : face.point) {
+			for (int j = 0; j < 3; j++) {
+				data.append(reinterpret_cast<char *>(&(point[j])), sizeof(point[j]));
+			}
+		}
+
+		// Attribute byte count 0 [2 bytes]
+		data.append(2, 0);
+	}
+
+
+	/* Generating ASCII format of STL (OLD)
+	 *
 	data.push_back(QString("solid " + model.getName() + "\n\n").toUtf8());
 
 	for (auto &face : model.getFaces()) {
@@ -88,5 +133,6 @@ void TStlHandler::generateStlFileData(const T3DModel &model, QByteArray &data) {
 	}
 
 	data.push_back(QString("endsolid " + model.getName() + "\n\n").toUtf8());
+	*/
 }
 
