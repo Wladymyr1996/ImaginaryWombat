@@ -3,6 +3,7 @@
 #include <QObject>
 #include <QSettings>
 #include <QRect>
+#include <QVector>
 
 class TSettingsHandler : public QObject {
 	Q_OBJECT

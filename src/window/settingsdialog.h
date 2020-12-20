@@ -27,7 +27,7 @@ class TSettingsDialog : public QDialog {
 
 	protected:
 		//void closeEvent(QCloseEvent *event) override;
-		void showEvent(QShowEvent *event) override;
+		void showEvent(QShowEvent *) override;
 
 	private:
 		QLabel *lblNuzzleSize;

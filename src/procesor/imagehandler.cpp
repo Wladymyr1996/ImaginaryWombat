@@ -1,5 +1,4 @@
 #include "imagehandler.h"
-#include <QDebug>
 
 TImageHandler *TImageHandler::GetInstance() {
 	static TImageHandler instance;
@@ -68,7 +67,7 @@ int TImageHandler::openImage(QString filename) {
 
 			QPoint p = origImage.rect().center() - cutRect.center();
 			cutRect.translate(p);
-			origImage.convertTo(QImage::Format_ARGB32);
+			origImage = origImage.convertToFormat(QImage::Format_ARGB32);
 
 			convertToGray();
 			calculateHistogramMap();
@@ -138,7 +137,6 @@ void TImageHandler::calculateHistogramMap() {
 
 	for (int i = 0; i < 256; i++) {
 		histogramMap[i] = (map[i] * 255) / max;
-		qDebug() << "histogramMap[" << i << "] = " << histogramMap[i] << "; map[" << i << "] = " << map[i] << "; max = " << max;
 	}
 }
 
@@ -148,8 +146,6 @@ void TImageHandler::updateImage() {
 
 	int depth = 4;
 	int range = whiteLevel - blackLevel;
-
-	qDebug() << "white: " << whiteLevel << "; black: " << blackLevel;
 
 	for (int i = 0; i < origImage.height(); i++) {
 		uchar *origLine = origImage.scanLine(i);

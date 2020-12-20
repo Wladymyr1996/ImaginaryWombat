@@ -119,8 +119,7 @@ void TSettingsDialog::doModed() {
 	pbtSave->setEnabled(moded);
 }
 
-void TSettingsDialog::showEvent(QShowEvent *event) {
-	qDebug() << "show";
+void TSettingsDialog::showEvent(QShowEvent *) {
 	if (parentPtr != nullptr)
 		setGeometry(QRect(parentPtr->geometry().center() - QPoint(width() / 2, height() / 2), size()));
 }
