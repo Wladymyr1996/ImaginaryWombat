@@ -4,7 +4,7 @@ T3DModel::T3DModel(QObject *parent) : QObject(parent) {
 
 }
 
-const QVector<TFace> &T3DModel::getFaces() const{
+const QVector<TFace> &T3DModel::getFaces() const {
 	return faces;
 }
 

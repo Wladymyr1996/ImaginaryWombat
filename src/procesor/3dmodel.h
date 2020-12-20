@@ -4,12 +4,12 @@
 #include <QVector>
 
 struct TPoint {
-	double x;
-	double y;
-	double z;
+	float x;
+	float y;
+	float z;
 
-	double &operator[](size_t index) {
-		static double TPoint::*coord[] = {
+	float &operator[](size_t index) {
+		static float TPoint::*coord[] = {
 			&TPoint::x,
 			&TPoint::y,
 			&TPoint::z,
@@ -18,7 +18,7 @@ struct TPoint {
 	}
 
 	double operator[](size_t index) const {
-		static double TPoint::*coord[] = {
+		static float TPoint::*coord[] = {
 			&TPoint::x,
 			&TPoint::y,
 			&TPoint::z,
