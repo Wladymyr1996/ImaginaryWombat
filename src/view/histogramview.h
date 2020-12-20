@@ -13,7 +13,7 @@ class THistogramView : public QWidget {
 	protected:
 		void paintEvent(QPaintEvent *);
 		void mousePressEvent(QMouseEvent *event);
-		void mouseReleaseEvent(QMouseEvent *event);
+		void mouseReleaseEvent(QMouseEvent *);
 		void mouseMoveEvent(QMouseEvent *event);
 
 

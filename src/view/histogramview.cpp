@@ -18,14 +18,16 @@ THistogramView::THistogramView(QWidget *parent) : QWidget(parent) {
 }
 
 void THistogramView::paintEvent(QPaintEvent *) {
-	const QColor &clBg = QApplication::palette().color(QPalette::Button);
-	const QColor &clColumn = QApplication::palette().color(QPalette::ButtonText);
+	const QColor &clBg = palette().color(QPalette::Base);
+	const QColor &clColumn = palette().color(QPalette::Active, QPalette::Text);
+	const QColor &clColumnInactive = palette().color(QPalette::Disabled, QPalette::Text);
 
 	QPainter painter(this);
-	painter.setPen(clColumn);
+	painter.setPen(palette().color(QPalette::ColorRole::Midlight));
 	painter.setBrush(QBrush(clBg));
 
 	painter.drawRect(3, 0, width() - 9, 100);
+
 
 	if (imageHandler->imageIsOpened()) {
 		int currentIndex = 0;
@@ -36,10 +38,16 @@ void THistogramView::paintEvent(QPaintEvent *) {
 				if (max < histogramMap[currentIndex])
 					max = histogramMap[currentIndex];
 
-			painter.drawLine(i + 3, 100, i + 3, 100 - (max * 100) / 256);
+			int x = i + 3;
+			if (x < blackLevelX || x > whiteLevelX)
+				painter.setPen(clColumnInactive);
+			else
+				painter.setPen(clColumn);
+
+			painter.drawLine(x, 100, x, 100 - (max * 100) / 256);
 		}
 
-		painter.setPen(Qt::black);
+		painter.setPen(palette().color(QPalette::ColorRole::Midlight));
 		painter.setBrush(QBrush(Qt::black));
 		painter.drawPolygon(pointer.translated(blackLevelX, 102));
 		painter.setBrush(QBrush(Qt::white));
@@ -73,7 +81,7 @@ void THistogramView::mousePressEvent(QMouseEvent *event) {
 	}
 }
 
-void THistogramView::mouseReleaseEvent(QMouseEvent *event) {
+void THistogramView::mouseReleaseEvent(QMouseEvent *) {
 	if (movingBlack || movingWhite) {
 		calculatelevels();
 		imageHandler->setHistagramLevels(blackLevel, whiteLevel);

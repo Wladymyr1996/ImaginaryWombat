@@ -2,7 +2,7 @@
 #include <QApplication>
 #include <QMouseEvent>
 #include <QPainterPath>
-#include <QPainter>
+#include <QStylePainter>
 #include <QBrush>
 #include <QRect>
 #include <QColor>
@@ -10,10 +10,11 @@
 
 TImageView::TImageView(QWidget *parent) : QWidget(parent) {
 	setMouseTracking(true);
-
-	highliteColor = QApplication::palette().color(QPalette::Highlight);
+	highliteColor = palette().color(QPalette::Shadow);
+	//highliteColor = palette().color(QPalette::Highlight);
 	highliteColorAlpha = highliteColor;
-	highliteColorAlpha.setAlpha(100);
+
+	highliteColorAlpha.setAlpha(200);
 
 	connect(imageHandler, &TImageHandler::isOpened, this, &TImageView::imageOpen);
 	connect(imageHandler, &TImageHandler::isClosed, this, &TImageView::imageClose);
@@ -38,12 +39,12 @@ void TImageView::imageClose() {
 }
 
 void TImageView::paintEvent(QPaintEvent *) {
-	QPainter painter(this);
+	QStylePainter painter(this);
 
 	QRect frame(0, 0, width()-1, height()-1);
 
-	painter.setPen(Qt::black);
-	painter.setBrush(QBrush(Qt::gray));
+	painter.setPen(palette().color(QPalette::ColorRole::Shadow));
+	painter.setBrush(QBrush(palette().color(QPalette::ColorRole::Mid)));
 	painter.drawRect(frame);
 
 	if (imageHandler->imageIsOpened()) {
@@ -71,7 +72,7 @@ void TImageView::paintEvent(QPaintEvent *) {
 		painter.setBrush(QBrush(highliteColorAlpha));
 		painter.drawPath(frameRect.subtracted(cutRect));
 
-		painter.setPen(Qt::black);
+		painter.setPen(QApplication::palette().color(QPalette::ColorRole::Shadow));
 		painter.setBrush(QBrush(QColor(0, 0, 0, 0)));
 		painter.drawRect(imgFrame);
 	} else {
@@ -91,7 +92,8 @@ void TImageView::paintEvent(QPaintEvent *) {
 		rectFrame.setTopLeft(lblFrame.topLeft() - QPoint(5, 5));
 		rectFrame.setSize(lblFrame.size() + QSize(10, 10));
 
-		painter.setBrush(QBrush(QColor(200, 100, 100)));
+		painter.setPen(QApplication::palette().color(QPalette::ColorRole::Shadow));
+		painter.setBrush(QBrush(QColor(230, 100, 100)));
 		painter.drawRoundedRect(rectFrame, 5, 5);
 		painter.setBrush(Qt::white);
 		painter.setPen(Qt::white);
