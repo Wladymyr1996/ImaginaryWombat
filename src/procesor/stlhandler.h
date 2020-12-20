@@ -17,7 +17,7 @@ class TStlHandler : public QObject
 
 		void generateModel(T3DModel &model, uchar *highMap);
 		void generateStlFileData(const T3DModel &model, QByteArray &data);
-		double calculateZ(int value);
+		double calculateZ(int value, float hight, float coef);
 
 		TSettingsHandler *settingsHandler = TSettingsHandler::GetInstance();
 		T3DModel model;
