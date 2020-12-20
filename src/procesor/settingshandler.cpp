@@ -44,10 +44,8 @@ void TSettingsHandler::LoadProgramSettings() {
 void TSettingsHandler::LoadPrinterSettings() {
 	fileSettings->beginGroup("/Printer");
 
-	printerSettings.firstLayThickness = fileSettings->value("/FirstLayThickness", 10).toInt();
-	printerSettings.layerThickness = fileSettings->value("/LayerThickness", 0.06f).toFloat();
-	printerSettings.numberOfLayer = fileSettings->value("/NumberOfLayer", 40).toInt();
-	printerSettings.nuzzleSize = fileSettings->value("/NuzzleSize", 0.4f).toFloat();
+	printerSettings.baseThickness = fileSettings->value("/BaseThickness", 0.1f).toFloat();
+	printerSettings.fullThickness = fileSettings->value("/FullThickness", 3.0f).toFloat();
 
 	fileSettings->endGroup();
 }
@@ -75,10 +73,8 @@ void TSettingsHandler::SaveProgramSettings() {
 void TSettingsHandler::SavePrinterSettings() {
 	fileSettings->beginGroup("/Printer");
 
-	fileSettings->setValue("/FirstLayThickness", printerSettings.firstLayThickness);
-	fileSettings->setValue("/LayerThickness", printerSettings.layerThickness);
-	fileSettings->setValue("/NumberOfLayer", printerSettings.numberOfLayer);
-	fileSettings->setValue("/NuzzleSize", printerSettings.nuzzleSize);
+	fileSettings->setValue("/BaseThickness", printerSettings.baseThickness);
+	fileSettings->setValue("/FullThickness", printerSettings.fullThickness);
 
 	fileSettings->endGroup();
 }

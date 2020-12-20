@@ -30,15 +30,11 @@ class TSettingsDialog : public QDialog {
 		void showEvent(QShowEvent *) override;
 
 	private:
-		QLabel *lblNuzzleSize;
-		QLabel *lblFirstLayThickness;
-		QLabel *lblNumberOfLayer;
-		QLabel *lblLayerThickness;
+		QLabel *lblBaseThickness;
+		QLabel *lblFullThickness;
 
-		QDoubleSpinBox *spbNuzzleSize;
-		QSpinBox *spbFirstLayThickness;
-		QSpinBox *spbNumberOfLayer;
-		QDoubleSpinBox *spbLayerThickness;
+		QDoubleSpinBox *spbBaseThickness;
+		QDoubleSpinBox *spbFullThickness;
 
 		QPushButton *pbtSave;
 		QPushButton *pbtDefault;

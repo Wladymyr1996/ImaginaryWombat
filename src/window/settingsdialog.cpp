@@ -10,32 +10,20 @@ TSettingsDialog::TSettingsDialog(QWidget *parent, Qt::WindowFlags flags) : QDial
 	QFormLayout *formLay = new QFormLayout;
 	QHBoxLayout *btnLay = new QHBoxLayout;
 
-	lblNuzzleSize = new QLabel;
-	spbNuzzleSize = new QDoubleSpinBox;
-	spbNuzzleSize->setValue(settingsHandler->GetPrinterSettings().nuzzleSize);
-	spbNuzzleSize->setRange(0, 2);
-	spbNuzzleSize->setSingleStep(0.1f);
+	lblBaseThickness = new QLabel;
+	spbBaseThickness = new QDoubleSpinBox;
+	spbBaseThickness->setValue(settingsHandler->GetPrinterSettings().baseThickness);
+	spbBaseThickness->setMinimum(0);
+	spbBaseThickness->setSingleStep(0.1f);
 
-	lblFirstLayThickness = new QLabel;
-	spbFirstLayThickness = new QSpinBox;
-	spbFirstLayThickness->setValue(settingsHandler->GetPrinterSettings().firstLayThickness);
-	spbFirstLayThickness->setSingleStep(1);
+	lblFullThickness = new QLabel;
+	spbFullThickness = new QDoubleSpinBox;
+	spbFullThickness->setValue(settingsHandler->GetPrinterSettings().fullThickness);
+	spbFullThickness->setMinimum(spbBaseThickness->value());
+	spbFullThickness->setSingleStep(0.1f);
 
-	lblNumberOfLayer = new QLabel;
-	spbNumberOfLayer = new QSpinBox;
-	spbNumberOfLayer->setValue(settingsHandler->GetPrinterSettings().numberOfLayer);
-	spbNumberOfLayer->setSingleStep(1);
-
-	lblLayerThickness = new QLabel;
-	spbLayerThickness = new QDoubleSpinBox;
-	spbLayerThickness->setValue(settingsHandler->GetPrinterSettings().layerThickness);
-	spbLayerThickness->setRange(0, 1);
-	spbLayerThickness->setSingleStep(0.1f);
-
-	formLay->addRow(lblNuzzleSize, spbNuzzleSize);
-	formLay->addRow(lblFirstLayThickness, spbFirstLayThickness);
-	formLay->addRow(lblNumberOfLayer, spbNumberOfLayer);
-	formLay->addRow(lblLayerThickness, spbLayerThickness);
+	formLay->addRow(lblBaseThickness, spbBaseThickness);
+	formLay->addRow(lblFullThickness, spbFullThickness);
 
 	pbtSave = new QPushButton;
 	pbtReset = new QPushButton;
@@ -57,28 +45,23 @@ TSettingsDialog::TSettingsDialog(QWidget *parent, Qt::WindowFlags flags) : QDial
 	connect(pbtReset, &QPushButton::clicked, this, &TSettingsDialog::doReset);
 	connect(pbtDefault, &QPushButton::clicked, this, &TSettingsDialog::doDefault);
 
-	connect(spbNuzzleSize, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &TSettingsDialog::doModed);
-	connect(spbFirstLayThickness, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &TSettingsDialog::doModed);
-	connect(spbNumberOfLayer, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &TSettingsDialog::doModed);
-	connect(spbLayerThickness, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &TSettingsDialog::doModed);
+	connect(spbBaseThickness, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &TSettingsDialog::doModed);
+	connect(spbFullThickness, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &TSettingsDialog::doModed);
 
 	doModed();
 
 	setFixedSize(480, 320);
-	//setWindowFlags(flags);
 }
 
 void TSettingsDialog::updateTextes() {
 	// TODO: add support for inch
 	QString unit = tr("mm");
 
-	lblNuzzleSize->setText(tr("Nuzzle size:"));
-	lblFirstLayThickness->setText(tr("First lay thickness:"));
-	lblNumberOfLayer->setText(tr("Layers number:"));
-	lblLayerThickness->setText(tr("Layer thickness:"));
+	lblBaseThickness->setText(tr("Nuzzle size:"));
+	lblFullThickness->setText(tr("First lay thickness:"));
 
-	spbNuzzleSize->setSuffix(" " + unit);
-	spbLayerThickness->setSuffix(" " + unit);
+	spbBaseThickness->setSuffix(" " + unit);
+	spbFullThickness->setSuffix(" " + unit);
 
 	pbtSave->setText(tr("Apply"));
 	pbtDefault->setText(tr("Default"));
@@ -88,33 +71,28 @@ void TSettingsDialog::updateTextes() {
 }
 
 void TSettingsDialog::doSave() {
-	settingsHandler->GetPrinterSettings().firstLayThickness = spbFirstLayThickness->value();
-	settingsHandler->GetPrinterSettings().layerThickness = spbLayerThickness->value();
-	settingsHandler->GetPrinterSettings().numberOfLayer = spbNumberOfLayer->value();
-	settingsHandler->GetPrinterSettings().nuzzleSize = spbNuzzleSize->value();
+	settingsHandler->GetPrinterSettings().baseThickness = spbBaseThickness->value();
+	settingsHandler->GetPrinterSettings().fullThickness = spbFullThickness->value();
 }
 
 void TSettingsDialog::doDefault() {
-	spbNuzzleSize->setValue(0.4f);
-	spbFirstLayThickness->setValue(10);
-	spbNumberOfLayer->setValue(40);
-	spbLayerThickness->setValue(0.06f);
+	spbBaseThickness->setValue(0.1f);
+	spbFullThickness->setValue(3.0f);
 }
 
 void TSettingsDialog::doReset() {
-	spbNuzzleSize->setValue(settingsHandler->GetPrinterSettings().nuzzleSize);
-	spbFirstLayThickness->setValue(settingsHandler->GetPrinterSettings().firstLayThickness);
-	spbNumberOfLayer->setValue(settingsHandler->GetPrinterSettings().numberOfLayer);
-	spbLayerThickness->setValue(settingsHandler->GetPrinterSettings().layerThickness);
+	spbBaseThickness->setValue(settingsHandler->GetPrinterSettings().baseThickness);
+	spbFullThickness->setValue(settingsHandler->GetPrinterSettings().fullThickness);
 }
 
 void TSettingsDialog::doModed() {
 	bool moded = false;
 
-	if (settingsHandler->GetPrinterSettings().firstLayThickness != spbFirstLayThickness->value()) moded = true;
-	if (qRound(settingsHandler->GetPrinterSettings().layerThickness * 100) != qRound(spbLayerThickness->value() * 100)) moded = true;
-	if (settingsHandler->GetPrinterSettings().numberOfLayer != spbNumberOfLayer->value()) moded = true;
-	if (qRound(settingsHandler->GetPrinterSettings().nuzzleSize * 100) != qRound(spbNuzzleSize->value() * 100)) moded = true;
+	if (qRound(settingsHandler->GetPrinterSettings().baseThickness * 100) != qRound(spbBaseThickness->value() * 100)) moded = true;
+	if (qRound(settingsHandler->GetPrinterSettings().fullThickness * 100) != qRound(spbFullThickness->value() * 100)) moded = true;
+
+	if (moded)
+		spbFullThickness->setMinimum(spbBaseThickness->value() + 0.01f);
 
 	pbtSave->setEnabled(moded);
 }

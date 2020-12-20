@@ -11,10 +11,8 @@ class TSettingsHandler : public QObject {
 	public:
 		// Структура даних принтеру
 		struct TPrinterSettings {
-			float nuzzleSize;
-			int firstLayThickness;
-			int numberOfLayer;
-			float layerThickness;
+			double baseThickness;
+			double fullThickness;
 		};
 
 		// Структура даних програми
