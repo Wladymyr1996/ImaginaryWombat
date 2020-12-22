@@ -8,8 +8,11 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QPushButton>
+#include <QComboBox>
+#include <QGroupBox>
 
 #include "procesor/settingshandler.h"
+#include "widgets/tunitdoublespinbox.h"
 
 class TSettingsDialog : public QDialog {
 	Q_OBJECT
@@ -23,6 +26,7 @@ class TSettingsDialog : public QDialog {
 		void doSave();
 		void doDefault();
 		void doReset();
+		void doChangeUnit();
 		void doModed();
 
 	protected:
@@ -30,11 +34,16 @@ class TSettingsDialog : public QDialog {
 		void showEvent(QShowEvent *) override;
 
 	private:
+		QLabel *lblUnits;
 		QLabel *lblBaseThickness;
 		QLabel *lblFullThickness;
 
-		QDoubleSpinBox *spbBaseThickness;
-		QDoubleSpinBox *spbFullThickness;
+		QGroupBox *grbGeneralSettings;
+		QComboBox *cmbUnits;
+
+		QGroupBox *grbPrinterSettings;
+		TUnitDoubleSpinBox *spbBaseThickness;
+		TUnitDoubleSpinBox *spbFullThickness;
 
 		QPushButton *pbtSave;
 		QPushButton *pbtDefault;
@@ -43,5 +52,7 @@ class TSettingsDialog : public QDialog {
 		TSettingsHandler *settingsHandler = TSettingsHandler::GetInstance();
 
 		QWidget *parentPtr;
+
+		QMap<QString, QString> unitsNames;
 };
 
