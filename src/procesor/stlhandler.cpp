@@ -1,6 +1,9 @@
 #include "stlhandler.h"
 #include <QtMath>
 #include <QDebug>
+#include <QPainterPath>
+#include <QElapsedTimer>
+#include <QFile>
 
 TStlHandler::TStlHandler() {
 	QObject(nullptr);
@@ -35,28 +38,65 @@ void TStlHandler::generateModel(T3DModel &model, uchar *highMap) {
 
 	model.clear();
 
-	// generation of image surface
-	for (int i = 0; i < 250 - 1; i++)
-		for (int j = 0; j < 250 - 1; j++) {
-			TPoint p[3];
+	QPainterPath cutRegion;
+	QRect region(1, 1, 249, 249);
+	switch (settingsHandler->GetProgramSettings().cutRectType) {
+		case TSettingsHandler::TCutRectType::RoundedSquare:
+			cutRegion.addRoundedRect(region, 25, 25);
+			break;
+		case TSettingsHandler::TCutRectType::Square:
+		default:
+			cutRegion.addRect(region);
+			break;
+	}
 
-			p[0].x = j;		p[0].y = i;		p[0].z = calculateZ(highMap[i * 250 + j], hight, coef);
-			p[1].x = j;		p[1].y = i + 1;	p[1].z = calculateZ(highMap[(i + 1) * 250 + j], hight, coef);
-			p[2].x = j + 1;	p[2].y = i + 1;	p[2].z = calculateZ(highMap[(i + 1) * 250 + j + 1], hight, coef);
+	QPoint path[4] = {{0, 0}, {0, 1}, {1, 1}, {1, 0}};
 
-			for (int pi = 0; pi < 3; pi++)
-				for (int pj = 0; pj < 2; pj++)
-					p[pi][pj] *= 0.4f;
-
-			model.addFace(p[2], p[1], p[0]);
-
-			p[1].x = j + 1;	p[1].y = i;		p[1].z = calculateZ(highMap[i * 250 + j + 1], hight, coef);
-
-			for (int pj = 0; pj < 2; pj++)
-				p[1][pj] *= 0.4f;
-
-			model.addFace(p[0], p[1], p[2]);
+	// calculate hightMap
+	float calculatedHightMap[251][251];
+	for (int i = 0; i < 251; i++)
+		for (int j = 0; j < 251; j++) {
+			calculatedHightMap[j][i] = cutRegion.contains(QPointF(j, i)) ? calculateZ(highMap[i * 250 + j], hight, coef) : base;
 		}
+
+	// generation of image surface
+	for (int i = 0; i < 250; i++)
+		for (int j = 0; j < 250; j++) {
+			QPoint point(j, i);
+			TPoint p[4];
+
+			for (int k = 0; k < 4; k ++) {
+				QPoint vertex = point + path[k];
+				p[k] = QPointF(vertex) / 2.5f;
+				p[k].y = 100.0f - p[k].y;
+				p[k].z = calculatedHightMap[vertex.x()][vertex.y()];
+			}
+
+			model.addFace(p[2], p[0], p[1]);
+			model.addFace(p[0], p[2], p[3]);
+		}
+
+	//generate a border
+	QFile borderFile("://borders/1.bin");
+	borderFile.open(QFile::ReadOnly);
+	QByteArray border = borderFile.readAll();
+	borderFile.close();
+
+	if (border.size() % 12)
+		qCritical() << borderFile.fileName() << "is invalid!";
+
+	char *data = border.data();
+	for (int i = 0; i < border.size() / 36; i++) {
+		TPoint p[3];
+		for (int j = 0; j < 3; j++)
+			for (int k = 0; k < 3; k++) {
+				unsigned coord = *(reinterpret_cast<unsigned *>(data + i * 36 + j * 12 + k * 4));
+				if (coord == 0xFFFFFFFF)
+					coord = *(reinterpret_cast<unsigned *>(&base));
+				p[j][k] = *(reinterpret_cast<float *>(&coord));
+			}
+		model.addFace(p, 3);
+	}
 }
 
 double TStlHandler::calculateZ(int value, float hight, float coef) {
