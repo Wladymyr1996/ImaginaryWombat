@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>borders/1.bin</file>
+    </qresource>
+</RCC>
