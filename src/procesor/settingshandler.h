@@ -13,6 +13,7 @@ class TSettingsHandler : public QObject {
 		struct TPrinterSettings {
 			double baseThickness;
 			double fullThickness;
+			QString unit;
 		};
 
 		// Структура даних програми
@@ -34,6 +35,8 @@ class TSettingsHandler : public QObject {
 
 		// Отримати налаштування принтера
 		TPrinterSettings &GetPrinterSettings();
+		// Отримати налаштування принтеру за замовчуванням
+		const TPrinterSettings &GetDefaultPrinterSettings();
 		// Отримати налаштування програми
 		TProgramSettings &GetProgramSettings();
 
@@ -41,6 +44,9 @@ class TSettingsHandler : public QObject {
 		void LoadProgramSettings();
 		// Завантажити налаштування програми із пам'яті
 		void LoadPrinterSettings();
+
+		QList<QString> GetUnitsList();
+		float GetUnitCoef(QString unit = "");
 
 	public slots:
 		// Записати налаштування програми
@@ -51,9 +57,11 @@ class TSettingsHandler : public QObject {
 	private:
 		TSettingsHandler();
 
+		const TPrinterSettings defaultPrinterSettings = {0.2f, 3.0f, "mm"};
 		TPrinterSettings printerSettings;
 		TProgramSettings programSettngs;
 
 		QSettings *fileSettings;
+		QMap<QString, float> units;
 
 };

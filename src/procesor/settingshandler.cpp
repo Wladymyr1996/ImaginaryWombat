@@ -1,4 +1,5 @@
 #include "settingshandler.h"
+#include <QDebug>
 
 TSettingsHandler::~TSettingsHandler() {
 	SavePrinterSettings();
@@ -14,6 +15,10 @@ TSettingsHandler *TSettingsHandler::GetInstance() {
 
 TSettingsHandler::TPrinterSettings &TSettingsHandler::GetPrinterSettings() {
 	return printerSettings;
+}
+
+const TSettingsHandler::TPrinterSettings &TSettingsHandler::GetDefaultPrinterSettings() {
+	return defaultPrinterSettings;
 }
 
 TSettingsHandler::TProgramSettings &TSettingsHandler::GetProgramSettings() {
@@ -44,10 +49,27 @@ void TSettingsHandler::LoadProgramSettings() {
 void TSettingsHandler::LoadPrinterSettings() {
 	fileSettings->beginGroup("/Printer");
 
-	printerSettings.baseThickness = fileSettings->value("/BaseThickness", 0.1f).toFloat();
-	printerSettings.fullThickness = fileSettings->value("/FullThickness", 3.0f).toFloat();
+	printerSettings.baseThickness = fileSettings->value("/BaseThickness", defaultPrinterSettings.baseThickness).toFloat();
+	printerSettings.fullThickness = fileSettings->value("/FullThickness", defaultPrinterSettings.fullThickness).toFloat();
+	printerSettings.unit = fileSettings->value("/Units", defaultPrinterSettings.unit).toString();
 
 	fileSettings->endGroup();
+}
+
+QList<QString> TSettingsHandler::GetUnitsList() {
+	return units.keys();
+}
+
+float TSettingsHandler::GetUnitCoef(QString unit) {
+	if (unit.isEmpty())
+		return units[printerSettings.unit];
+
+	if (!units.contains(unit)) {
+		qCritical() << "Unit " << unit << " not found";
+		return units[printerSettings.unit];
+	}
+
+	return units[unit];
 }
 
 void TSettingsHandler::SaveProgramSettings() {
@@ -75,12 +97,16 @@ void TSettingsHandler::SavePrinterSettings() {
 
 	fileSettings->setValue("/BaseThickness", printerSettings.baseThickness);
 	fileSettings->setValue("/FullThickness", printerSettings.fullThickness);
+	fileSettings->setValue("/Units", printerSettings.unit);
 
 	fileSettings->endGroup();
 }
 
 TSettingsHandler::TSettingsHandler() {
 	fileSettings = new QSettings("ShaiTech", "ImaginaryWombat");
+
+	units["inch"] = 0.0393700787f;
+	units["mm"] = 1.0f;
 
 	LoadPrinterSettings();
 	LoadProgramSettings();
