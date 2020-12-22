@@ -1,4 +1,5 @@
 #include "3dmodel.h"
+#include <QDebug>
 
 T3DModel::T3DModel(QObject *parent) : QObject(parent) {
 
@@ -13,6 +14,15 @@ void T3DModel::addFace(TPoint p1, TPoint p2, TPoint p3) {
 	face.point.push_back(p1);
 	face.point.push_back(p2);
 	face.point.push_back(p3);
+
+	addFace(face);
+}
+
+void T3DModel::addFace(TPoint *point, int count) {
+	TFace face;
+	for (int i = 0; i < count; i++) {
+		face.point.append(point[i]);
+	}
 
 	addFace(face);
 }
