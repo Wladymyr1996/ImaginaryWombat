@@ -20,9 +20,10 @@ SOURCES += \
     src/procesor/settingshandler.cpp \
     src/mainwindow.cpp \
     src/procesor/stlhandler.cpp \
-    src/view/histogramview.cpp \
-    src/view/imageview.cpp \
-    src/view/tools.cpp \
+    src/widgets/histogramview.cpp \
+    src/widgets/imageview.cpp \
+    src/widgets/tools.cpp \
+    src/widgets/tunitdoublespinbox.cpp \
     src/window/settingsdialog.cpp
 
 HEADERS += \
@@ -33,9 +34,10 @@ HEADERS += \
     src/procesor/settingshandler.h \
     src/mainwindow.h \
     src/procesor/stlhandler.h \
-    src/view/histogramview.h \
-    src/view/imageview.h \
-    src/view/tools.h \
+    src/widgets/histogramview.h \
+    src/widgets/imageview.h \
+    src/widgets/tools.h \
+    src/widgets/tunitdoublespinbox.h \
     src/window/settingsdialog.h
 
 TRANSLATIONS += \
@@ -47,4 +49,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 RESOURCES += \
+    borders.qrc \
     languages.qrc

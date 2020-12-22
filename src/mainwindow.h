@@ -13,8 +13,8 @@
 #include "procesor/imagehandler.h"
 #include "procesor/globalfunctions.h"
 #include "procesor/stlhandler.h"
-#include "view/imageview.h"
-#include "view/tools.h"
+#include "widgets/imageview.h"
+#include "widgets/tools.h"
 
 #include "window/settingsdialog.h"
 

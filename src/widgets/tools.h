@@ -9,7 +9,7 @@
 #include <QAction>
 
 #include "procesor/settingshandler.h"
-#include "view/histogramview.h"
+#include "widgets/histogramview.h"
 
 class TTools : public QWidget {
 	Q_OBJECT
