@@ -23,6 +23,27 @@ void TImageHandler::setHistagramLevels(int blackLvl, int whiteLvl) {
 	whiteLevel = whiteLvl;
 
 	updateImage();
+    emit histogramChanged(blackLevel, whiteLevel);
+}
+
+void TImageHandler::resolveHistogram() {
+    int newWhiteLevel = 255;
+    int newBlackLevel = 0;
+
+    int maxSum = 0;
+    for (int i = 0; i < 255; i++) maxSum += histogramMap[i];
+    maxSum /= 100; // 1% from max value
+
+    int i;
+    int sum;
+
+    for (i = 0, sum = 0; i < 255 && sum < maxSum; i++) sum += histogramMap[i];
+    newBlackLevel = i;
+
+    for (i = 255, sum = 0; i > newBlackLevel && sum < maxSum; i--) sum += histogramMap[i];
+    newWhiteLevel = i;
+
+    setHistagramLevels(newBlackLevel, newWhiteLevel);
 }
 
 uchar *TImageHandler::getHistogramMapPtr() {

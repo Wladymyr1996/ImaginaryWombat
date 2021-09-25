@@ -9,8 +9,10 @@ THistogramView::THistogramView(QWidget *parent) : QWidget(parent) {
 	setMouseTracking(true);
 
 	histogramMap = imageHandler->getHistogramMapPtr();
+
 	connect(imageHandler, &TImageHandler::isOpened, this, &THistogramView::imageOpened);
 	connect(imageHandler, &TImageHandler::isClosed, this, &THistogramView::imageClosed);
+    connect(imageHandler, &TImageHandler::histogramChanged, this, &THistogramView::histogramChanged);
 
 	pointer.push_back(QPoint(0, 0));
 	pointer.push_back(QPoint(3, 6));
@@ -52,9 +54,7 @@ void THistogramView::paintEvent(QPaintEvent *) {
 		painter.drawPolygon(pointer.translated(blackLevelX, 102));
 		painter.setBrush(QBrush(Qt::white));
 		painter.drawPolygon(pointer.translated(whiteLevelX, 102));
-	} else {
-
-	}
+    }
 
 	if (!isEnabled()) {
 		QColor color = QApplication::palette().color(QPalette::Inactive, QPalette::Window);
@@ -65,6 +65,14 @@ void THistogramView::paintEvent(QPaintEvent *) {
 	}
 
 	painter.end();
+}
+
+void THistogramView::histogramChanged(int blackLevel, int whiteLevel) {
+    this->blackLevel = blackLevel;
+    this->whiteLevel = whiteLevel;
+
+    calculatePointersPos();
+    repaint();
 }
 
 void THistogramView::mousePressEvent(QMouseEvent *event) {

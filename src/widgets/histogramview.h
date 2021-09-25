@@ -20,6 +20,7 @@ class THistogramView : public QWidget {
 	private slots:
 		void imageOpened();
 		void imageClosed();
+        void histogramChanged(int blackLevel, int whiteLevel);
 
 	private:
 		void calculatePointersPos();

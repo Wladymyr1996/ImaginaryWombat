@@ -28,7 +28,8 @@ TTools::TTools(QWidget *parent) : QWidget(parent) {
 
 	setLayout(lay);
 
-	connect(cmbForm, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &TTools::doFormUpdate);
+    connect(cmbForm, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &TTools::doFormUpdate);
+    connect(btnHistAuto, &QPushButton::clicked, imageHandler, &TImageHandler::resolveHistogram);
 }
 
 void TTools::updateTextes() {

@@ -38,5 +38,6 @@ class TTools : public QWidget {
 		QVector<QAction *> formList;
 
 		TSettingsHandler *settingsHandler = TSettingsHandler::GetInstance();
+        TImageHandler *imageHandler = TImageHandler::GetInstance();
 };
 

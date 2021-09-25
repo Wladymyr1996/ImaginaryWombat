@@ -20,12 +20,14 @@ class TImageHandler : public QObject {
 
 	public slots:
 		int openImage(QString filename);
+        void resolveHistogram();
 		void closeImage();
 
 	signals:
 		void isClosed();
 		void isOpened();
 		void isUpdated();
+        void histogramChanged(int, int);
 
 	private:
 		TImageHandler();
