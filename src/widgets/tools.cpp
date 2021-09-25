@@ -16,6 +16,7 @@ TTools::TTools(QWidget *parent) : QWidget(parent) {
 	grbHist = new QGroupBox;
 	histogramView = new THistogramView;
 	btnHistAuto = new QPushButton;
+    btnHistAuto->setDisabled(true);
 	QVBoxLayout *histLay = new QVBoxLayout;
 	histLay->addWidget(histogramView);
 	histLay->addWidget(btnHistAuto);
@@ -30,6 +31,8 @@ TTools::TTools(QWidget *parent) : QWidget(parent) {
 
     connect(cmbForm, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &TTools::doFormUpdate);
     connect(btnHistAuto, &QPushButton::clicked, imageHandler, &TImageHandler::resolveHistogram);
+    connect(imageHandler, &TImageHandler::isClosed, [this](){this->btnHistAuto->setDisabled(true); });
+    connect(imageHandler, &TImageHandler::isOpened, [this](){this->btnHistAuto->setEnabled(true); });
 }
 
 void TTools::updateTextes() {
