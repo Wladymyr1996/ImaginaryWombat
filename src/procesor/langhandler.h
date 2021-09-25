@@ -27,15 +27,14 @@ class TLanguageHandler : public QObject {
 
 	public slots:
 		// Встановлює мову програми
-		void SetLanguage(const QString &code);
+        void SetLanguage(const QString &code);
 
 	private:
 		TLanguageHandler();
+        QString generateLangPath(const QString &code);
 
 		QTranslator *translator = nullptr;
 		QVector<TLanguage> *languageList;
 		QString currentLang;
 		const TLanguage empty = {"Unkonwn", "", ""};
-
-
 };

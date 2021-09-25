@@ -39,12 +39,18 @@ void TLanguageHandler::SetLanguage(const QString &code) {
 		return;
 	}
 
-	QString langPath = "://lang/" + code + ".qm";
 	currentLang = code;
-	if (!translator->load(langPath)) {
+    if (!translator->load(generateLangPath(code))) {
 		QMessageBox::critical(nullptr, tr("Language error"), tr("Can't load language \"") + getLanguage(code).name + "\"");
+
+        currentLang = "en";
+        translator->load(generateLangPath(currentLang));
 	}
 	return;
+}
+
+QString TLanguageHandler::generateLangPath(const QString &code) {
+    return "://lang/" + code + ".qm";
 }
 
 TLanguageHandler::TLanguageHandler() {
