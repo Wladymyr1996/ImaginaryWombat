@@ -165,8 +165,8 @@ void MainWindow::updateTextes() {
 	printerSettingsAction->setText(tr("Printer settings"));
 
 	aboutMenu->setTitle(tr("About"));
-	aboutAction->setText(tr("About"));
-	helpAction->setText(tr("Help"));
+    aboutAction->setText(tr("About"));
+//	helpAction->setText(tr("Help"));
 }
 
 void MainWindow::updateRecentMenu() {
@@ -203,7 +203,7 @@ void MainWindow::updateRecentMenu() {
 void MainWindow::loadLanguages() {
 	langHandler->addLanguage("English", "en", "://icons/flags/us.png");
 	langHandler->addLanguage("Українська", "uk", "://icons/flags/ua.png");
-	langHandler->addLanguage("Русский", "ru", "://icons/flags/ru.png");
+//	langHandler->addLanguage("Русский", "ru", "://icons/flags/ru.png");
 }
 
 void MainWindow::createTopMenu() {
@@ -290,8 +290,8 @@ void MainWindow::createLanguageMenu() {
 
 void MainWindow::createAboutMenu() {
 	aboutMenu = new QMenu();
-	helpAction = aboutMenu->addAction(QIcon("://icons/menu/help.png"), "");
-	aboutMenu->addSeparator();
+//	helpAction = aboutMenu->addAction(QIcon("://icons/menu/help.png"), "");
+//	aboutMenu->addSeparator();
 	aboutAction = aboutMenu->addAction(QIcon("://icons/menu/help.png"), "");
 
 	topMenu->addMenu(aboutMenu);
