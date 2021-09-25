@@ -40,6 +40,7 @@ void TImageView::imageClose() {
 
 void TImageView::paintEvent(QPaintEvent *) {
 	QStylePainter painter(this);
+	painter.setRenderHint(QPainter::Antialiasing);
 
 	QRect frame(0, 0, width()-1, height()-1);
 
@@ -76,8 +77,6 @@ void TImageView::paintEvent(QPaintEvent *) {
 		painter.setBrush(QBrush(QColor(0, 0, 0, 0)));
 		painter.drawRect(imgFrame);
 	} else {
-		painter.setRenderHint(QPainter::Antialiasing);
-
 		painter.drawLine(0, 0, frame.width(), frame.height());
 		painter.drawLine(0, frame.height(), frame.width(), 0);
 
