@@ -24,6 +24,7 @@ SOURCES += \
     src/widgets/imageview.cpp \
     src/widgets/tools.cpp \
     src/widgets/tunitdoublespinbox.cpp \
+    src/window/aboutdialog.cpp \
     src/window/settingsdialog.cpp
 
 HEADERS += \
@@ -38,6 +39,7 @@ HEADERS += \
     src/widgets/imageview.h \
     src/widgets/tools.h \
     src/widgets/tunitdoublespinbox.h \
+    src/window/aboutdialog.h \
     src/window/settingsdialog.h
 
 TRANSLATIONS += \
@@ -52,3 +54,36 @@ RESOURCES += \
     borders.qrc \
     icons.qrc \
     languages.qrc
+
+
+HEADERS += \
+    src/procesor/3dmodel.h \
+    src/procesor/globalfunctions.h \
+    src/procesor/imagehandler.h \
+    src/procesor/langhandler.h \
+    src/procesor/settingshandler.h \
+    src/mainwindow.h \
+    src/procesor/stlhandler.h \
+    src/widgets/histogramview.h \
+    src/widgets/imageview.h \
+    src/widgets/tools.h \
+    src/widgets/tunitdoublespinbox.h \
+    src/window/aboutdialog.h \
+    src/window/settingsdialog.h
+
+TRANSLATIONS += \
+    lang/en.ts \
+    lang/uk.ts
+
+# Default rules for deployment.
+qnx: target.path = /tmp/$${TARGET}/bin
+else: unix:!android: target.path = /opt/$${TARGET}/bin
+!isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    borders.qrc \
+    icons.qrc \
+    languages.qrc
+
+DISTFILES += \
+    lang/uk.ts

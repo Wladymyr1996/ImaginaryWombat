@@ -88,5 +88,5 @@ class MainWindow : public QMainWindow {
 		TImageView *imageViewer;
 		TTools *toolsViewer;
 
-		TSettingsDialog *settingsDialog;
+        TSettingsDialog *settingsDialog;
 };

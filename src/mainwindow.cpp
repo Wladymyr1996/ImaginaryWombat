@@ -3,6 +3,8 @@
 #include <QEvent>
 #include <QMessageBox>
 
+#include "window/aboutdialog.h"
+
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 	setWindowTitle(tr("Imaginary Wombat"));
 	setMinimumSize(640, 480);
@@ -294,6 +296,14 @@ void MainWindow::createAboutMenu() {
 //	aboutMenu->addSeparator();
 	aboutAction = aboutMenu->addAction(QIcon("://icons/menu/help.png"), "");
 
-	topMenu->addMenu(aboutMenu);
+    topMenu->addMenu(aboutMenu);
+
+    connect(aboutAction, &QAction::triggered, [this](bool){
+       TAboutDialog *aboutDialog = new TAboutDialog(this, Qt::WindowStaysOnTopHint);
+       setEnabled(false);
+       aboutDialog->exec();
+       setEnabled(true);
+       delete aboutDialog;
+    });
 }
 
