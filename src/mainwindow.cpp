@@ -23,7 +23,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 	wdgt->setLayout(lay);
 	setCentralWidget(wdgt);
 
-	langHandler->SetLanguage(settingsHandler->GetProgramSettings().language);
+    langHandler->SetLanguage(settingsHandler->GetProgramSettings().language);
 
 	connect(imageHandler, &TImageHandler::isClosed, this, &MainWindow::updateFileMenu);
 	connect(imageHandler, &TImageHandler::isOpened, this, &MainWindow::updateFileMenu);
@@ -185,7 +185,7 @@ void MainWindow::updateRecentMenu() {
 
 	auto &fileList = settingsHandler->GetProgramSettings().recentFiles;
 	for (auto &it : fileList) {
-		QAction *act = openRecentFileMenu->addAction(GlobalFunctions::getFileNameFromFilepath(it));
+		QAction *act = openRecentFileMenu->addAction(QIcon("://icons/menu/file.png"), GlobalFunctions::getFileNameFromFilepath(it));
 		connect(act, &QAction::triggered, recentFilesSignalMaper,
 				static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
 		recentFilesSignalMaper->setMapping(act, it);
@@ -201,9 +201,9 @@ void MainWindow::updateRecentMenu() {
 }
 
 void MainWindow::loadLanguages() {
-	langHandler->addLanguage("English", "en", "://img/icon/lang/en.png");
-	langHandler->addLanguage("Українська", "uk", "://img/icon/lang/uk.png");
-	langHandler->addLanguage("Русский", "ru", "://img/icon/lang/ru.png");
+	langHandler->addLanguage("English", "en", "://icons/flags/us.png");
+	langHandler->addLanguage("Українська", "uk", "://icons/flags/ua.png");
+	langHandler->addLanguage("Русский", "ru", "://icons/flags/ru.png");
 }
 
 void MainWindow::createTopMenu() {
@@ -220,14 +220,14 @@ void MainWindow::createFileMenu() {
 	createOpenRecentFileMenu();
 
 	fileMenu = new QMenu();
-	openImageAction = fileMenu->addAction("");
+	openImageAction = fileMenu->addAction(QIcon("://icons/menu/open.png"), "");
 	fileMenu->addMenu(openRecentFileMenu);
 	openRecentFileMenu->setDisabled(openRecentFileMenu->isEmpty());
-	closeImageAction = fileMenu->addAction("");
+	closeImageAction = fileMenu->addAction(QIcon("://icons/menu/closeImage.png"), "");
 	fileMenu->addSeparator();
-	saveStlAction = fileMenu->addAction("");
+	saveStlAction = fileMenu->addAction(QIcon("://icons/menu/save3D.png"), "");
 	fileMenu->addSeparator();
-	exitAction = fileMenu->addAction("");
+	exitAction = fileMenu->addAction(QIcon("://icons/menu/exit.png"), "");
 
 	topMenu->addMenu(fileMenu);
 
@@ -241,7 +241,8 @@ void MainWindow::createFileMenu() {
 
 void MainWindow::createOpenRecentFileMenu() {
 	openRecentFileMenu = new QMenu();
-	clearOpenRecentFiles = new QAction(this);
+	openRecentFileMenu->setIcon(QIcon("://icons/menu/openHistory.png"));
+	clearOpenRecentFiles = new QAction(QIcon("://icons/menu/clear.png"), "", this);
 
 	updateRecentMenu();
 
@@ -252,7 +253,7 @@ void MainWindow::createSettingsMenu() {
 	createLanguageMenu();
 
 	settingsMenu = new QMenu();
-	printerSettingsAction = settingsMenu->addAction("");
+	printerSettingsAction = settingsMenu->addAction(QIcon("://icons/menu/setting.png"), "");
 	settingsMenu->addSeparator();
 	settingsMenu->addMenu(languageMenu);
 
@@ -263,11 +264,12 @@ void MainWindow::createSettingsMenu() {
 
 void MainWindow::createLanguageMenu() {
 	languageMenu = new QMenu(tr("Language"));
+	languageMenu->setIcon(QIcon("://icons/menu/lang.png"));
 
 	if (languageMenuSignalMapper == nullptr) {
 		languageActions = new QVector<QAction *>;
 		languageMenuSignalMapper = new QSignalMapper(this);
-		connect(languageMenuSignalMapper, static_cast<void (QSignalMapper::*)(const QString &)>(&QSignalMapper::mapped),
+        connect(languageMenuSignalMapper, static_cast<void (QSignalMapper::*)(const QString &)>(&QSignalMapper::mapped),
 				langHandler, &TLanguageHandler::SetLanguage);
 	} else {
 		languageMenu->clear();
@@ -278,7 +280,7 @@ void MainWindow::createLanguageMenu() {
 
 	auto langList = langHandler->getLangList();
 	for (auto &it : langList) {
-		QAction *act = languageMenu->addAction(it.name);
+		QAction *act = languageMenu->addAction(QIcon(it.icon), it.name);
 
 		connect(act, &QAction::triggered, languageMenuSignalMapper,
 				static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
@@ -288,9 +290,9 @@ void MainWindow::createLanguageMenu() {
 
 void MainWindow::createAboutMenu() {
 	aboutMenu = new QMenu();
-	helpAction = aboutMenu->addAction("");
+	helpAction = aboutMenu->addAction(QIcon("://icons/menu/help.png"), "");
 	aboutMenu->addSeparator();
-	aboutAction = aboutMenu->addAction("");
+	aboutAction = aboutMenu->addAction(QIcon("://icons/menu/help.png"), "");
 
 	topMenu->addMenu(aboutMenu);
 }

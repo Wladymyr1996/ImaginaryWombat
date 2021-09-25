@@ -50,4 +50,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     borders.qrc \
+    icons.qrc \
     languages.qrc

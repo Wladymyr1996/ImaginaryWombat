@@ -1,0 +1,16 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icons/flags/us.png</file>
+        <file>icons/flags/ua.png</file>
+        <file>icons/menu/setting.png</file>
+        <file>icons/menu/openHistory.png</file>
+        <file>icons/menu/open.png</file>
+        <file>icons/menu/lang.png</file>
+        <file>icons/menu/help.png</file>
+        <file>icons/menu/file.png</file>
+        <file>icons/menu/exit.png</file>
+        <file>icons/menu/closeImage.png</file>
+        <file>icons/menu/save3D.png</file>
+        <file>icons/menu/clear.png</file>
+    </qresource>
+</RCC>
