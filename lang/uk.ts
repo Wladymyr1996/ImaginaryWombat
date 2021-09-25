@@ -191,7 +191,7 @@ Tranlator: *none*
         <location filename="../src/window/settingsdialog.cpp" line="92"/>
         <source>Units</source>
         <comment>Settings dialog</comment>
-        <translation type="unfinished">Одиниці вимірювання:</translation>
+        <translation>Одиниці вимірювання:</translation>
     </message>
     <message>
         <location filename="../src/window/settingsdialog.cpp" line="93"/>
